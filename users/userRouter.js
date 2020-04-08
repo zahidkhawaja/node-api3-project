@@ -4,7 +4,14 @@ const User = require("./userDb");
 const Post = require("../posts/postDb");
 
 router.post('/', (req, res) => {
-  // do your magic!
+  User.insert(req.body)
+  .then(users => {
+    res.status(201).json(users)
+  })
+  .catch(err => {
+    console.log(err);
+    res.status(500).json({ message: "Cannot add user."})
+  })
 });
 
 router.post('/:id/posts', (req, res) => {
