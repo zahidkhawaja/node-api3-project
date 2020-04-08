@@ -16,7 +16,7 @@ router.get('/', (req, res) => {
 });
 
 // GET user by ID
-router.get('/:id', (req, res) => {
+router.get('/:id', validateUserId, (req, res) => {
   User.getById(req.params.id)
   .then(user => {
     res.status(200).json(user)
@@ -65,18 +65,36 @@ router.delete('/:id', (req, res) => {
 
 // GET posts by user ID
 router.get('/:id/posts', (req, res) => {
-  // do your magic!
+  Post.getById(req.params.id)
+  .then(posts => {
+    res.status(200).json(posts);
+  })
+  .catch(err => {
+    console.log(err);
+    res.status(500).json({ message: "Error getting posts for this user ID."})
+  })
 });
 
 // POST posts by user ID
 router.post('/:id/posts', (req, res) => {
-  // do your magic!
+  Post.insert(req.body)
+  .then(userPost => {
+    res.status(201).json(userPost);
+  })
+  .catch(err => {
+    console.log(err);
+    res.status(500).json({ message: "Error adding post."})
+  })
 });
 
 //custom middleware
 
 function validateUserId(req, res, next) {
-  // do your magic!
+  User.getById(req.params.id)
+  .then(user => {
+    user ? req.user = user : res.status(400).json({ message: "Incorrect user ID."})
+  })
+  next();
 }
 
 function validateUser(req, res, next) {
