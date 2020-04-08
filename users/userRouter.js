@@ -28,7 +28,7 @@ router.get('/:id', validateUserId, (req, res) => {
 });
 
 // POST user
-router.post('/', (req, res) => {
+router.post('/', validateUser, (req, res) => {
   User.insert(req.body)
   .then(users => {
     res.status(201).json(users)
@@ -76,7 +76,7 @@ router.get('/:id/posts', (req, res) => {
 });
 
 // POST posts by user ID
-router.post('/:id/posts', (req, res) => {
+router.post('/:id/posts', validatePost, (req, res) => {
   Post.insert(req.body)
   .then(userPost => {
     res.status(201).json(userPost);
@@ -98,11 +98,23 @@ function validateUserId(req, res, next) {
 }
 
 function validateUser(req, res, next) {
-  // do your magic!
+  if(!req.body) {
+    res.status(400).json({ message: "User data missing."})
+  }  else if(req.body.name === "") {
+    res.status(400).json({ message: "Missing name."})
+  } else {
+    next();
+}
 }
 
 function validatePost(req, res, next) {
-  // do your magic!
+  if(!req.body) {
+    res.status(400).json({ message: "Post data missing."})
+  }  else if(req.body.name === "") {
+    res.status(400).json({ message: "Missing post text."})
+  } else {
+    next();
+}
 }
 
 module.exports = router;
