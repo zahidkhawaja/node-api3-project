@@ -15,7 +15,7 @@ server.get('/', (req, res) => {
 
 //Middleware
 function logger(req, res, next) {
-  console.log(`${req.method} Request to ${req.originalUrl}`);
+  console.log(`${req.method} Request to ${req.originalUrl} at ${new Date()}`);
   next();
 }
 
