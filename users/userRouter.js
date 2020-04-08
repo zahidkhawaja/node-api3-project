@@ -3,21 +3,7 @@ const router = express.Router();
 const User = require("./userDb");
 const Post = require("../posts/postDb");
 
-router.post('/', (req, res) => {
-  User.insert(req.body)
-  .then(users => {
-    res.status(201).json(users)
-  })
-  .catch(err => {
-    console.log(err);
-    res.status(500).json({ message: "Cannot add user."})
-  })
-});
-
-router.post('/:id/posts', (req, res) => {
-  // do your magic!
-});
-
+// GET all users
 router.get('/', (req, res) => {
   User.get()
   .then(users => {
@@ -29,6 +15,7 @@ router.get('/', (req, res) => {
   })
 });
 
+// GET user by ID
 router.get('/:id', (req, res) => {
   User.getById(req.params.id)
   .then(user => {
@@ -40,15 +27,42 @@ router.get('/:id', (req, res) => {
   })
 });
 
+// POST user
+router.post('/', (req, res) => {
+  User.insert(req.body)
+  .then(users => {
+    res.status(201).json(users)
+  })
+  .catch(err => {
+    console.log(err);
+    res.status(500).json({ message: "Cannot add user."})
+  })
+});
+
+// PUT user
+router.put('/:id', (req, res) => {
+  // do your magic!
+});
+
+// DELETE user
+router.delete('/:id', (req, res) => {
+  User.remove(req.params.id)
+  .then(count => {
+    count > 0 ? res.status(200).json({ message: "User has been deleted."}) : res.status(404).json({ message: "Cannot find user."})
+  })
+  .catch(err => {
+    console.log(err);
+    res.status(500).json({ message: "Error removing user."})
+  })
+});
+
+// GET posts by user ID
 router.get('/:id/posts', (req, res) => {
   // do your magic!
 });
 
-router.delete('/:id', (req, res) => {
-  // do your magic!
-});
-
-router.put('/:id', (req, res) => {
+// POST posts by user ID
+router.post('/:id/posts', (req, res) => {
   // do your magic!
 });
 
