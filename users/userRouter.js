@@ -41,7 +41,14 @@ router.post('/', (req, res) => {
 
 // PUT user
 router.put('/:id', (req, res) => {
-  // do your magic!
+  User.update(req.params.id, req.body)
+  .then(user => {
+    user ? res.status(200).json(user) : res.status(404).json({ message: "User not found."})
+  })
+  .catch(err => {
+    console.log(err);
+    res.status(500).json({ message: "Unable to update the user."})
+  })
 });
 
 // DELETE user
